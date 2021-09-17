@@ -45,10 +45,10 @@ def apply_color_overlay(frame, intensity=0.5, blue=0, green=0, red=0):
     return frame
 
 
-def apply_sepia(frame, intensity=0.5):
+def apply_sepia(frame, intensity=0.5): #la intencidad es un valor entre el 0 y el 1.
     frame = verify_alpha_channel(frame)
     frame_h, frame_w, frame_c = frame.shape
-    sepia_bgra = (20, 66, 112, 1)
+    sepia_bgra = (20, 66, 112, 1) #azul tipo 22, verde tipo 66  y rojo tipo 112. Combinacion del color sepia. Valores RGB.
     overlay = np.full((frame_h, frame_w, 4), sepia_bgra, dtype='uint8')
     cv2.addWeighted(overlay, intensity, frame, 1.0, 0, frame)
     return frame
@@ -63,7 +63,7 @@ def alpha_blend(frame_1, frame_2, mask):
 def apply_circle_focus_blur(frame, intensity=0.2):
     frame = verify_alpha_channel(frame)
     frame_h, frame_w, frame_c = frame.shape
-    y = int(frame_h/2)
+    y = int(frame_h/2) #para encontrar el centro de la imagen.
     x = int(frame_w/2)
 
     mask = np.zeros((frame_h, frame_w, 4), dtype='uint8')
@@ -78,10 +78,10 @@ def apply_circle_focus_blur(frame, intensity=0.2):
 
 def portrait_mode(frame):
     cv2.imshow('frame', frame)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #convert color
     _, mask = cv2.threshold(gray, 120,255,cv2.THRESH_BINARY)
 
-    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGRA)
+    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGRA) #convert color // BGRA suele tener solo tres canales, la A incluye el canal alfa.
     blured = cv2.GaussianBlur(frame, (21,21), 11)
     blended = alpha_blend(frame, blured, mask)
     frame = cv2.cvtColor(blended, cv2.COLOR_BGRA2BGR)
@@ -89,7 +89,7 @@ def portrait_mode(frame):
 
 
 def apply_invert(frame):
-    return cv2.bitwise_not(frame)
+    return cv2.bitwise_not(frame) #intercambia el valor de todos los pixeles.
 
 while(True):
     # Capture frame-by-frame
@@ -99,7 +99,7 @@ while(True):
 
 
     hue_sat = apply_hue_saturation(frame.copy(), alpha=3, beta=3)
-    cv2.imshow('hue_sat', hue_sat)
+    cv2.imshow('hue_sat', hue_sat) #se nombra la camara y se manda a llamar la funcion definida.
     
     sepia = apply_sepia(frame.copy(), intensity=.8)
     cv2.imshow('sepia',sepia)
@@ -118,6 +118,6 @@ while(True):
     if cv2.waitKey(20) & 0xFF == ord('q'):
         break
 
-# When everything done, release the capture
+#Cuando todo esta hecho, release la captura
 cap.release()
 cv2.destroyAllWindows()
