@@ -16,7 +16,7 @@ out = cv2.VideoWriter(save_path, config.video_type, frames_per_seconds, config.d
 
 def verify_alpha_channel(frame):
     try:
-        frame.shape[3] # looking for the alpha channel
+        frame.shape[3] # Buscando por el canal Alfa
     except IndexError:
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
     return frame
@@ -78,10 +78,10 @@ def apply_circle_focus_blur(frame, intensity=0.2):
 
 def portrait_mode(frame):
     cv2.imshow('frame', frame)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #convert color
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #convertir color
     _, mask = cv2.threshold(gray, 120,255,cv2.THRESH_BINARY)
 
-    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGRA) #convert color // BGRA suele tener solo tres canales, la A incluye el canal alfa.
+    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGRA) #convertir color // BGRA suele tener solo tres canales, la A incluye el canal alfa.
     blured = cv2.GaussianBlur(frame, (21,21), 11)
     blended = alpha_blend(frame, blured, mask)
     frame = cv2.cvtColor(blended, cv2.COLOR_BGRA2BGR)
@@ -92,7 +92,7 @@ def apply_invert(frame):
     return cv2.bitwise_not(frame) #intercambia el valor de todos los pixeles.
 
 while(True):
-    # Capture frame-by-frame
+    # Captura frame por frrame
     ret, frame = cap.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA) 
     #cv2.imshow('frame',frame)
